@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import icon from '../assets/icon.png';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaGithub } from 'react-icons/fa';
 
 function HomeScreen() {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ function HomeScreen() {
         </h1>
 
         {/* Buttons Container */}
-        <div className="absolute right-8 flex gap-6">
+        <div className="absolute right-8 flex gap-6 items-center">
           <button
             className="text-white text-lg font-bold button-underline"
             onClick={() => navigate('/about')}
@@ -42,6 +42,12 @@ function HomeScreen() {
             className="text-white text-lg font-bold button-underline"
           >
             Home
+          </button>
+          <button
+            className="github-button text-white text-lg font-bold flex items-center justify-center transition-colors duration-300"
+            onClick={() => navigate('/github-login')}
+          >
+            <FaGithub size={30} />
           </button>
         </div>
       </div>

@@ -66,3 +66,15 @@
 .button-underline:not(:hover)::after {
   transform: translateX(100%);
 }
+
+.github-button {
+  color: white;
+}
+
+.github-button:hover {
+  color: #54CEFF; /* Light blue color */
+}
+
+.github-button:active {
+  color: #3bb0e0; /* Slightly darker blue for active state */
+}
