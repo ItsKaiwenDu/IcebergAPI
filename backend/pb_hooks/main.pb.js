@@ -36,10 +36,29 @@ routerAdd("POST", "/api/favorite", (e) => {
     }
 
     let favoritesCollection = $app.findCollectionByNameOrId("favorites")
-    let promptRecord = $app.findRecordById("prompts", apiResultCache["recordId"])
+    //let promptRecord = $app.findRecordById("prompts", apiResultCache["recordId"])
+
+    if (apiResultCache["result"][data["index"]] == null) {
+        return e.json(401, { error: "Index not found in cache" })
+    }
+
+    const apiResult = apiResultCache["result"][data["index"]]
 
     let favoritesRecord = new Record(favoritesCollection)
+    favoritesRecord.set("apiName", apiResult["name"])
+    favoritesRecord.set("apiDescription", apiResult["description"])
+    favoritesRecord.set("apiCategory", apiResult["category"])
+    favoritesRecord.set("apiUrl", apiResult["url"])
+    favoritesRecord.set("requireApiKey", apiResult["requireApiKey"])
+    favoritesRecord.set("relevanceScore", apiResult["relevanceScore"])
+    favoritesRecord.set("httpSecure", apiResult["httpSecure"])
+    favoritesRecord.set("supportCORS", apiResult["supportCORS"])
 
+    favoritesRecord.set("prompt", apiResultCache["recordId"])
+
+    $app.save(favoritesRecord)
+
+    return e.json(200, {"success": true})
 })
 
 routerAdd("POST", "/api/result", (e) => {
