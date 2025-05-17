@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Testing</title>
+
+    </head>
+    <body>
+        <script type="module">
+            import PocketBase from 'https://cdn.jsdelivr.net/npm/pocketbase@0.26.0/+esm';
+
+            const pb = new PocketBase('http://127.0.0.1:8090');
+
+            const authData = await pb.collection('users').authWithOAuth2({ provider: 'github' });
+
+            const result = await pb.send("/api/prompt", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    prompt: "Hey there",
+                }),
+            });
+
+            console.log(result);
+        </script>
+    </body>
+</html>
