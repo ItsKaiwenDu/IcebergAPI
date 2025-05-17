@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/HomeScreen.css';
 import icon from '../assets/icon.png';
+import { FaSearch } from 'react-icons/fa';
 
 function HomeScreen() {
   const navigate = useNavigate();
@@ -42,11 +43,18 @@ function HomeScreen() {
           <span className="text-[#54CEFF]">API</span>
         </h1>
         <p className="text-2xl mt-4 drop-shadow-lg">Where your idea gets unwrangled.</p>
-        <input
-          type="text"
-          placeholder="What's on your mind today..."
-          className="mt-12 px-8 py-4 rounded-[50px] shadow-xl text-gray-700 w-[50rem] bg-[#c7dce4]"
-        />
+        <div className="relative mt-12 w-[50rem]">
+          <input
+            type="text"
+            placeholder="What's on your mind today..."
+            className="px-8 py-4 rounded-[50px] shadow-xl text-gray-700 w-full bg-[#c7dce4] pr-16"
+          />
+          <button
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#54CEFF] text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-[#3bb0e0]"
+          >
+            <FaSearch />
+          </button>
+        </div>
       </div>
     </div>
   );
