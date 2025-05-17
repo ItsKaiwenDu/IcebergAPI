@@ -28,21 +28,21 @@ function AboutScreen() {
           <span className="text-[#54CEFF]">API</span>
         </h1>
 
-        {/* About Button */}
-        <button
-          className="absolute right-30 text-white text-lg font-bold hover:underline"
-          onClick={() => navigate('/about')}
-        >
-          About
-        </button>
-
-        {/* Home Button */}
-        <button
-          className="absolute right-8 text-white text-lg font-bold hover:underline"
-          onClick={() => navigate('/')}
-        >
-          Home
-        </button>
+        {/* Buttons Container */}
+        <div className="absolute right-8 flex gap-6">
+          <button
+            className="text-white text-lg font-bold button-underline"
+            onClick={() => navigate('/about')}
+          >
+            About
+          </button>
+          <button
+            className="text-white text-lg font-bold button-underline"
+            onClick={() => navigate('/')}
+          >
+            Home
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
