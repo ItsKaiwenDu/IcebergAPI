@@ -4,6 +4,7 @@ import './App.css';
 
 import HomeScreen from './components/HomeScreen';
 import AboutScreen from './components/AboutScreen';
+import ResultScreen from './components/ResultScreen';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeScreen />} />
         <Route path="/about" element={<AboutScreen />} />
+        <Route path="/results" element={<ResultScreen />} />
       </Routes>
     </Router>
   );

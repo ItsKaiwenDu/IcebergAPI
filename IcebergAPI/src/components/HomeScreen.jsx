@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import icon from '../assets/icon.png';
 import { FaSearch } from 'react-icons/fa';
 
 function HomeScreen() {
   const navigate = useNavigate();
+  const [query, setQuery] = useState('');
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate(`/results?query=${encodeURIComponent(query)}`);
+    }
+  };
 
   return (
     <div className="bg-dots text-white min-h-screen w-full flex flex-col items-center justify-center">
@@ -51,9 +58,12 @@ function HomeScreen() {
             type="text"
             placeholder="What's on your mind today..."
             className="px-8 py-4 rounded-[50px] shadow-xl text-gray-700 w-full bg-[#c7dce4] pr-16"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <button
             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#54CEFF] text-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:bg-[#3bb0e0]"
+            onClick={handleSearch}
           >
             <FaSearch />
           </button>
