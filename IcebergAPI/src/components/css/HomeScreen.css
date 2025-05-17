@@ -30,7 +30,6 @@
   justify-content: center;
 }
 
-/* Button underline animation */
 .button-underline {
   position: relative;
   display: inline-block;
@@ -72,9 +71,9 @@
 }
 
 .github-button:hover {
-  color: #54CEFF; /* Light blue color */
+  color: #54CEFF;
 }
 
 .github-button:active {
-  color: #3bb0e0; /* Slightly darker blue for active state */
+  color: #3bb0e0;
 }
