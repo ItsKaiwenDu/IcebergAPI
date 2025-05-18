@@ -13,17 +13,18 @@
 
             const pb = new PocketBase('http://127.0.0.1:8090');
 
+
             const authData = await pb.collection('users').authWithOAuth2({ provider: 'github' });
 
-            // const result = await pb.send("/api/result", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({
-            //         prompt: "Hey there",
-            //     }),
-            // })
-            //
-            // console.log(result)
+            const result = await pb.send("/api/result", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    prompt: "Hey there",
+                }),
+            })
+
+            console.log(result)
             //
             // const res = await pb.send("/api/favorite", {
             //     method: "POST",
@@ -35,12 +36,12 @@
             // });
             //
             // console.log(res);
-
-            const re = await pb.send("/api/history", {
-                method: "GET"
-            })
-
-            console.log(re);
+            //
+            // const re = await pb.send("/api/history", {
+            //     method: "GET"
+            // })
+            //
+            // console.log(re);
 
         </script>
     </body>

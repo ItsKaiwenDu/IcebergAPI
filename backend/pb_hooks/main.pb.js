@@ -66,18 +66,51 @@ routerAdd("POST", "/api/result", (e) => {
     record.set("prompt", data["prompt"])
     record.set("user", id)
 
-    let apiResults = [
-        {
-            "name": "weather",
-            "description": "Weather channel",
-            "category": "Weather",
-            "url": "https://weather.com",
-            "requireApiKey": true,
-            "relevanceScore": 102,
-            "httpSecure": true,
-            "supportCORS": true,
-        },
-    ]
+    // let apiResults = [
+    //     {
+    //         "name": "weather",
+    //         "description": "Weather channel",
+    //         "category": "Weather",
+    //         "url": "https://weather.com",
+    //         "requireApiKey": true,
+    //         "relevanceScore": 102,
+    //         "httpSecure": true,
+    //         "supportCORS": true,
+    //     },
+    // ]
+
+    let apiResults = [];
+
+    let apiResultsRaw;
+
+    try {
+        apiResultsRaw = $http.send({
+            url: "http://127.0.0.1:8000/api/search",
+            method: "POST",
+            body: JSON.stringify({ query: data["prompt"] }),
+            headers: {"content-type": "application/json"},
+            timeout: 120,
+        })
+
+        if (apiResultsRaw.statusCode !== 200) {
+            return e.json(401, { error: "Unable to get API Results" })
+        }
+    } catch (err) {
+        return e.json(401, { error: "Error with this" })
+    }
+
+    for (const result of apiResultsRaw.json["ranked_apis"]) {
+        apiResults.push({
+            "name": result["name"],
+            "url": result["url"],
+            "description": result["description"],
+            "category": result["category"],
+            "relevanceScore": result["relevance_score"],
+            "httpSecure": result["https"] === "Yes",
+            "requireApiKey": result["auth"] === "Yes",
+            "supportCORS": result["cors"] === "Yes",
+        })
+    }
 
     $app.save(record)
 
