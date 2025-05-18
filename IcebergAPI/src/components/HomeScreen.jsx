@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import icon from '../assets/icon.png';
 import { FaSearch, FaGithub } from 'react-icons/fa';
 import PocketBase from 'pocketbase';
+import pb from '../pb';
+import './css/HomeScreen.css';
 
 function HomeScreen() {
   const navigate = useNavigate();
@@ -15,17 +17,15 @@ function HomeScreen() {
   };
 
   const handleLogin = async () => {
-  // const pb = new PocketBase('http://127.0.0.1:8090');
-
-  // try {
-  //   const authData = await pb.collection('users').authWithOAuth2({
-  //     provider: 'github',
-  //   });
-  
-  //   console.log('Login successful:', authData);
-  // } catch (error) {
-  //   console.error('Login failed:', error);
-  // }
+    try {
+      const authData = await pb.collection('users').authWithOAuth2({
+        provider: 'github',
+      });
+    
+      console.log('Login successful:', authData);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   }
 
   return (
