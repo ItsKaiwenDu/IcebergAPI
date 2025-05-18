@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import icon from '../assets/icon.png';
 import { FaSearch, FaGithub } from 'react-icons/fa';
+import PocketBase from 'pocketbase';
 
 function HomeScreen() {
   const navigate = useNavigate();
@@ -12,6 +13,20 @@ function HomeScreen() {
       navigate(`/results?query=${encodeURIComponent(query)}`);
     }
   };
+
+  const handleLogin = async () => {
+  // const pb = new PocketBase('http://127.0.0.1:8090');
+
+  // try {
+  //   const authData = await pb.collection('users').authWithOAuth2({
+  //     provider: 'github',
+  //   });
+  
+  //   console.log('Login successful:', authData);
+  // } catch (error) {
+  //   console.error('Login failed:', error);
+  // }
+  }
 
   return (
     <div className="bg-dots text-white min-h-screen w-full flex flex-col items-center justify-center">
@@ -45,7 +60,7 @@ function HomeScreen() {
           </button>
           <button
             className="github-button text-white text-lg font-bold flex items-center justify-center transition-colors duration-300"
-            onClick={() => navigate('/github-login')}
+            onClick={handleLogin}
           >
             <FaGithub size={30} />
           </button>
