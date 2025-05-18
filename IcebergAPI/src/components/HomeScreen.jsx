@@ -4,6 +4,7 @@ import icon from '../assets/icon.png';
 import { FaSearch, FaGithub } from 'react-icons/fa';
 import PocketBase from 'pocketbase';
 import pb from '../pb';
+import './css/HomeScreen.css';
 
 function HomeScreen() {
   const navigate = useNavigate();
