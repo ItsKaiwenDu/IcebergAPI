@@ -1,22 +1,5 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-const apiResultsCache = new Map();
-
-const URL = "http://127.0.01:8090"
-
-const APIResultsExample = [
-    {
-        "name": "weather",
-        "description": "Weather channel",
-        "category": "Weather",
-        "url": new URL("https://weather.com"),
-        "requireApiKey": true,
-        "relevanceScore": 102,
-        "httpSecure": true,
-        "supportCORS": true,
-    },
-]
-
 routerAdd("POST", "/api/favorite", (e) => {
     const id = e.auth?.id
 
@@ -26,23 +9,26 @@ routerAdd("POST", "/api/favorite", (e) => {
 
     const data = new DynamicModel({
         index: 0, // Text field
+        apiResultsCache: {}, // Object field
     })
     e.bindBody(data)
 
-    const apiResultCache = apiResultsCache.get(id)
+    const apiResultCache = data["apiResultsCache"]
 
-    if (typeof apiResultCache !== "object") {
+    if (!apiResultCache) {
         return e.json(401, { error: "User does not have existing results they searched" })
     }
+
+    console.log(apiResultCache["recordId"])
 
     let favoritesCollection = $app.findCollectionByNameOrId("favorites")
     //let promptRecord = $app.findRecordById("prompts", apiResultCache["recordId"])
 
-    if (apiResultCache["result"][data["index"]] == null) {
+    if (apiResultCache.get("result")[data["index"]] == null) {
         return e.json(401, { error: "Index not found in cache" })
     }
 
-    const apiResult = apiResultCache["result"][data["index"]]
+    const apiResult = apiResultCache.get("result")[data["index"]]
 
     let favoritesRecord = new Record(favoritesCollection)
     favoritesRecord.set("apiName", apiResult["name"])
@@ -54,7 +40,8 @@ routerAdd("POST", "/api/favorite", (e) => {
     favoritesRecord.set("httpSecure", apiResult["httpSecure"])
     favoritesRecord.set("supportCORS", apiResult["supportCORS"])
 
-    favoritesRecord.set("prompt", apiResultCache["recordId"])
+    favoritesRecord.set("prompt", apiResultCache.get("recordId"))
+    favoritesRecord.set("user", id)
 
     $app.save(favoritesRecord)
 
@@ -79,18 +66,70 @@ routerAdd("POST", "/api/result", (e) => {
     record.set("prompt", data["prompt"])
     record.set("user", id)
 
+    let apiResults = [
+        {
+            "name": "weather",
+            "description": "Weather channel",
+            "category": "Weather",
+            "url": "https://weather.com",
+            "requireApiKey": true,
+            "relevanceScore": 102,
+            "httpSecure": true,
+            "supportCORS": true,
+        },
+    ]
+
     $app.save(record)
 
-    let apiResults = []
-
-    apiResults = APIResultsExample
-
-    apiResultsCache.set(id, {
+    return e.json(200, {
         "recordId": record.id,
         "result": apiResults,
     })
+}, $apis.requireAuth())
 
-    return e.json(200, {"result": apiResults})
+routerAdd("GET", "/api/history", (e) => {
+    const id = e.auth?.id
+
+    if (!id) {
+        return e.json(401, { error: "Unauthorized" })
+    }
+
+    let collection = $app.findCollectionByNameOrId("favorites")
+
+    let records = $app.findRecordsByFilter(
+        "favorites",
+        "user = {:uid}",
+        "-created",
+        50,
+        0,
+        { uid: id }
+    )
+    let result = {}
+
+    for (const record of records) {
+        if (record == null) continue;
+
+        const promptRecord = $app.findRecordById("prompts", record.get("prompt"))
+
+        const promptText = promptRecord.get("prompt")
+
+        if (!result[promptText]) {
+            result[promptText] = []
+        }
+
+        result[promptText].push({
+            "name": record.get("apiName"),
+            "url": record.get("apiUrl"),
+            "description": record.get("apiDescription"),
+            "category": record.get("apiCategory"),
+            "relevanceScore": record.get("relevanceScore"),
+            "requireApiKey": record.get("requireApiKey"),
+            "httpSecure": record.get("httpSecure"),
+            "supportCORS": record.get("supportCORS"),
+        })
+    }
+
+    return e.json(200, result)
 }, $apis.requireAuth())
 
 routerAdd("GET", "/api/auth/login", (e) => {
@@ -106,6 +145,6 @@ onRecordAfterUpdateSuccess((e) => {
 onBootstrap((e) => {
     e.next()
 
-    const utils = require(`${__hooks}/utils.js`)
+    const config = require(`${__hooks}/config.js`)
     console.log("App initialized!")
 })
