@@ -13,11 +13,11 @@
 
             const pb = new PocketBase('http://127.0.0.1:8090');
 
-
             const authData = await pb.collection('users').authWithOAuth2({ provider: 'github' });
 
             const result = await pb.send("/api/result", {
                 method: "POST",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     prompt: "Hey there",

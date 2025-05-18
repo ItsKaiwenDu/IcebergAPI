@@ -83,6 +83,8 @@ routerAdd("POST", "/api/result", (e) => {
 
     let apiResultsRaw;
 
+    console.log('tesst')
+
     try {
         apiResultsRaw = $http.send({
             url: "http://127.0.0.1:8000/api/search",
