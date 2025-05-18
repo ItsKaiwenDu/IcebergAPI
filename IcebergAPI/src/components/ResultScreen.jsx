@@ -1,11 +1,14 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import icon from '../assets/icon.png';
+import pb from '../pb';
 
 function ResultScreen() {
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search).get('query');
+
+  
 
   return (
     <div className="bg-dots text-white min-h-screen w-full flex flex-col items-center py-10">
